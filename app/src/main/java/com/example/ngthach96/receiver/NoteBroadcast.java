@@ -15,6 +15,9 @@ import com.example.ngthach96.activity.MainActivity;
 import com.example.ngthach96.MainScreen.R;
 import com.example.ngthach96.model.MyNote;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * Created by NgThach96 on 6/9/2017.
  */
@@ -24,9 +27,7 @@ public class NoteBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context,"Notification created",Toast.LENGTH_SHORT).show();
         Bundle bundle = intent.getExtras();
-        if(bundle == null) Toast.makeText(context,"bundle null", Toast.LENGTH_SHORT).show();
         MyNote myNote = (MyNote) bundle.getSerializable("myNote");
-        if(myNote == null)  Toast.makeText(context,"myNote null", Toast.LENGTH_SHORT).show();
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(myNote.getTitle())
@@ -35,6 +36,12 @@ public class NoteBroadcast extends BroadcastReceiver {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         Intent intent1 = new Intent(context, ActivityShowNote.class);
+        ArrayList<MyNote> arrayList = new ArrayList<>();
+        arrayList.add(myNote);
+        Bundle bundle1 = new Bundle();
+        bundle1.putSerializable("ARRAYLIST", (Serializable)arrayList);
+        bundle1.putInt("POSITION", 0);
+        intent1.putExtra("BUNDLE", bundle1);
         stackBuilder.addNextIntent(intent1);
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

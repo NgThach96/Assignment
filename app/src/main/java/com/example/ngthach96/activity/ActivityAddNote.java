@@ -201,43 +201,54 @@ public class ActivityAddNote extends AppCompatActivity implements View.OnClickLi
                     MyNote myNote = new MyNote(medTitle.getText().toString(),
                             medNote.getText().toString(), mSpDate.getSelectedItem().toString(),
                             mSpTime.getSelectedItem().toString(), sdf4.format(myDate), color, mUri.trim(),
-                            alarmOrNot, calendar.getTimeInMillis()%1000000);
+                            alarmOrNot, calendar.getTimeInMillis() % 1000000);
                     if (alarmOrNot == 1) {
-                        if(mSpDate.getSelectedItemPosition() == 3) {
-                            StringTokenizer stringTokenizer = new StringTokenizer(mSpDate.getSelectedItem().toString(), "/");
-                            int day = Integer.valueOf(stringTokenizer.nextToken());
-                            int month = Integer.valueOf(stringTokenizer.nextToken());
-                            int year = Integer.valueOf(stringTokenizer.nextToken());
-                            calendar.set(Calendar.DAY_OF_MONTH, day);
-                            calendar.set(Calendar.MONTH, month - 1);
-                            calendar.set(Calendar.YEAR, year);
-                            stringTokenizer = new StringTokenizer(mSpTime.getSelectedItem().toString(), ":");
-                            int hour = Integer.valueOf(stringTokenizer.nextToken());
-                            int minute = Integer.valueOf(stringTokenizer.nextToken());
-
-                            calendar.set(Calendar.HOUR_OF_DAY, hour);
-                            calendar.set(Calendar.MINUTE, minute);
-                            calendar.set(Calendar.SECOND, 0);
-                            Toast.makeText(this, day + " " + month+ " " + year + " " + hour + ":" + minute,Toast.LENGTH_SHORT).show();
-
-
-                            Intent myIntent = new Intent(this, NoteBroadcast.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("myNote",myNote);
-                            bundle.putInt("int", 1);
-                            myIntent.putExtras(bundle);
-
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)myNote.getId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                            AlarmManager alarmManager =  (AlarmManager)getSystemService(ALARM_SERVICE);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                        switch (mSpDate.getSelectedItemPosition()) {
+                            case 3:
+                                StringTokenizer stringTokenizer = new StringTokenizer(mSpDate.getSelectedItem().toString(), "/");
+                                int day = Integer.valueOf(stringTokenizer.nextToken());
+                                int month = Integer.valueOf(stringTokenizer.nextToken());
+                                int year = Integer.valueOf(stringTokenizer.nextToken());
+                                calendar.set(Calendar.DAY_OF_MONTH, day);
+                                calendar.set(Calendar.MONTH, month - 1);
+                                calendar.set(Calendar.YEAR, year);
+                                break;
+                            case 0:
+                                break;
+                            case 1:
+                                day = calendar.get(Calendar.DAY_OF_MONTH);
+                                calendar.set(Calendar.DAY_OF_MONTH, day + 1);
+                                break;
+                            case 2:
+                                day = calendar.get(Calendar.DAY_OF_MONTH);
+                                calendar.set(Calendar.DAY_OF_MONTH, day + 7);
+                                break;
                         }
+                        StringTokenizer stringTokenizer = new StringTokenizer(mSpTime.getSelectedItem().toString(), ":");
+                        int hour = Integer.valueOf(stringTokenizer.nextToken());
+                        int minute = Integer.valueOf(stringTokenizer.nextToken());
+                        calendar.set(Calendar.HOUR_OF_DAY, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, 0);
+
+                        Intent myIntent = new Intent(this, NoteBroadcast.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("myNote", myNote);
+                        bundle.putInt("int", 1);
+                        myIntent.putExtras(bundle);
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) myNote.getId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+                        //Test
                     } else {
                         Intent intent = new Intent(this, NoteBroadcast.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("myNote",myNote);
+                        bundle.putSerializable("myNote", myNote);
                         bundle.putInt("int", 1);
                         intent.putExtras(bundle);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)myNote.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) myNote.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
                     }
