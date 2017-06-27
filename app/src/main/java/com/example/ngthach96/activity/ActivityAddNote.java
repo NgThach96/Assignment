@@ -159,10 +159,10 @@ public class ActivityAddNote extends AppCompatActivity implements View.OnClickLi
                             case 1:
                                 Toast.makeText(ActivityAddNote.this, "u click choose photo", Toast.LENGTH_SHORT).show();
 
-                                if (Build.VERSION.SDK_INT < 19) {
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                                     Intent intent;
                                     intent = new Intent();
-                                    intent.setAction(Intent.ACTION_PICK);
+                                    intent.setAction(Intent.ACTION_GET_CONTENT);
                                     intent.setType("image/*");
                                     startActivityForResult(intent, PICK_IMAGE);
                                 } else {

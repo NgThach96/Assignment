@@ -14,13 +14,7 @@ import com.example.ngthach96.activity.ActivityShowNote;
 import com.example.ngthach96.activity.MainActivity;
 import com.example.ngthach96.MainScreen.R;
 import com.example.ngthach96.model.MyNote;
-
-import java.io.Serializable;
 import java.util.ArrayList;
-
-/**
- * Created by NgThach96 on 6/9/2017.
- */
 
 public class NoteBroadcast extends BroadcastReceiver {
     @Override
