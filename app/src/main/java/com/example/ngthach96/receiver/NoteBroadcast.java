@@ -31,7 +31,7 @@ public class NoteBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(myNote.getTitle())
-                .setContentText(myNote.getNote());
+                .setContentText(myNote.getNote()).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
@@ -39,7 +39,7 @@ public class NoteBroadcast extends BroadcastReceiver {
         ArrayList<MyNote> arrayList = new ArrayList<>();
         arrayList.add(myNote);
         Bundle bundle1 = new Bundle();
-        bundle1.putSerializable("ARRAYLIST", (Serializable)arrayList);
+        bundle1.putSerializable("ARRAYLIST", arrayList);
         bundle1.putInt("POSITION", 0);
         intent1.putExtra("BUNDLE", bundle1);
         stackBuilder.addNextIntent(intent1);
